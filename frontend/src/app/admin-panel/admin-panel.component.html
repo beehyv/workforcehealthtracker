@@ -1,0 +1,961 @@
+<!--<div *ngIf="true">-->
+  <div class="toolbar d-md-flex d-none align-items-center shadow">
+    <div class="logo align-self-stretch p-4 d-flex">
+      {{language.facility_health_center}}
+    </div>
+    <div class="search-bar d-flex">
+      <input [(ngModel)]="search" class="px-3 py-2" type="text" placeholder="{{language.search}}">
+      <button mat-flat-button (click)="searchReports()">
+        <img src="assets/search.png" alt="search icon">
+      </button>
+    </div>
+    <span class="space-section"></span>
+    <div class="profile-section pointer text-center">
+      <img src="assets/profile-image.png" alt="">
+      <span></span>
+    </div>
+    <mat-divider class="my-2 align-self-stretch" vertical="true"></mat-divider>
+    <div class="logout-icon pointer px-1 mr-4">
+      <button [ngbTooltip]="language.logout" mat-flat-button (click)="logout()">
+        <img src="assets/logout.png" alt="{{language.logout}}">
+      </button>
+    </div>
+  </div>
+  <div class="d-md-none d-block toolbar shadow">
+    <div class="logo  align-self-stretch px-0 py-0 d-flex" style="font-size: 17px; height: 52px;">
+        <span *ngIf="!searchOn" class="mr-auto my-auto ml-3"
+              style="height: 17px; font-size: 17px;">{{language.facility_health_center}}</span>
+      <input *ngIf="searchOn" class="mr-auto w-100 pl-2" style=" font-size: 17px;" [(ngModel)]="search" type="text"
+             placeholder="{{language.search}}">
+
+
+      <!-- <button mat-flat-button (click)= "searchReports()"> -->
+      <img class="my-auto mr-4 ml-2" src="assets/search.png" alt="search icon" style="width: 20px; height: 20px;"
+           (click)="searchClicked()">
+      <!-- </button> -->
+      <div class="option-box-2">
+        <img [ngbPopover]="menuToggle" [autoClose]="'outside'" placement="left" class="my-auto mr-3"
+             src="assets/menu.png" alt="{{language.logout}}"
+             style="width: 20px; height: 20px; margin-top: 1rem !important;">
+        <ng-template #menuToggle>
+          <div class="container p-1">
+            <div class="d-flex">
+              <button type="button" style="text-decoration: none !important" class="btn btn-link"
+                      style="margin: auto; padding: 0;"><span></span></button>
+            </div>
+            <hr class="m-1">
+            <div class="d-flex">
+              <button type="button" style="text-decoration: none !important" class="btn btn-link"
+                      style="margin: auto; padding: 0;" (click)="logout()">Logout
+              </button>
+            </div>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container-fluid py-0">
+    <!-- <mat-toolbar class="toolbar">
+      <mat-toolbar-row>
+        <div class="logo h-100 p-3 d-flex align-items-center">{{language.facility_health_center}}</div>
+        <span class="space-section"></span>
+        <div class="profile-section">
+          <div>admin@hospital.com</div>
+          <div class="float-right pointer" (click)="logout()">{{language.logout}}
+            <i class="material-icons icon-view v-align-mid">keyboard_arrow_right</i></div>
+        </div>
+      </mat-toolbar-row>
+    </mat-toolbar> -->
+
+
+    <!-- DONT MAKE ANY CHANGE AFTER THIS LINE -->
+
+
+    <div class="d-flex mr-md-5 mx-0 my-2 pt-2 px-md-2">
+      <div class="mr-auto font-weight-bold my-auto reporting-text">
+<!--        {{language.professionals_reporting_to_you}}-->
+      </div>
+      <div class="d-md-flex d-none mb-0 ml-0 column-blocks mt-2">
+        <div>
+          <div>{{language.responded}}</div>
+          <div>{{aggregatesValue.responded}}</div>
+        </div>
+        <div>
+          <div>{{language.yet_to_respond}}</div>
+          <div>{{aggregatesValue.yet_to_respond}}</div>
+        </div>
+        <div>
+          <div>{{language.test_ordered}}</div>
+          <div>{{aggregatesValue.test_ordered}}</div>
+        </div>
+        <div>
+          <div>{{language.no_action}}</div>
+          <div>{{aggregatesValue.no_action}}</div>
+        </div>
+        <div>
+          <div>{{language.results_pending}}</div>
+          <div>{{aggregatesValue.result_pending}}</div>
+        </div>
+        <div>
+          <div>{{language.tested_positive}}</div>
+          <div>{{aggregatesValue.negative}}</div>
+        </div>
+        <div>
+          <div>{{language.tested_negative}}</div>
+          <div>{{aggregatesValue.positive}}</div>
+        </div>
+        <div>
+          <div>{{language.precautionary_symptoms}}</div>
+          <div>{{aggregatesValue.precautionary_symptoms + aggregatesValue.precuationary_general}}</div>
+        </div>
+        <div>
+          <div>{{language.home_quarantine_72}}</div>
+          <div>{{aggregatesValue.advised_stay_home + aggregatesValue.home_quarantine_24 + aggregatesValue.home_quarantine_72}}</div>
+        </div>
+      </div>
+      <span class="space-section"></span>
+      <!-- <div>
+        <input type="text" class="mr-2 search-button pl-3" [placeholder]=language.search (change)="searchUser($event)">
+      </div> -->
+      <button class="btn btn-link mx-md-2 mr-2 p-0" placement="bottom" [ngbTooltip]="language.filter"
+              (click)="openFilterDialog();"><svg class="custom-button-size" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" attr.fill="{{isFilter ? 'red' : '#4d7dd5' }}" width="18px" height="18px"><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/><path d="M0 0h24v24H0z" fill="none"/></svg></button>
+      <button class="btn btn-link mx-md-2 mr-2 p-0" placement="bottom" [ngbTooltip]="language.add_worker"
+              (click)="openHealthWorkerDialog()"><img src="../../assets/addWorker.png" class="custom-button-size"></button>
+      <button *ngIf="false" class="btn btn-link mx-md-2 p-0"  placement="bottom" [ngbTooltip]="language.import_worker"
+              style="height: 48px; width: 48px;"><img src="../../assets/importWorker.png" class="custom-button-size"></button>
+    </div>
+    <div class="worker-survey-report">
+      <div class="d-md-block d-none" style="display: flow-root">
+        <div class="chip-container " [class.visibility-hidden]="!isFilter">
+          <mat-form-field class="example-chip-list">
+            <mat-chip-list #chipList aria-label="Fruit selection">
+              <mat-chip *ngFor="let filter of filterLists" [selectable]="selectable"
+                        [removable]="removable" (removed)="remove(filter)">
+                {{filter.name}}
+                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+              </mat-chip>
+              <input placeholder="Filters added"
+                     [matChipInputFor]="chipList" readonly>
+            </mat-chip-list>
+          </mat-form-field>
+
+        </div>
+      <mat-paginator
+        class="mx-5"
+        *ngIf="pageSize"
+        [length]="totalWorkers"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [hidePageSize]="true"
+        [disabled]="loadingReports"
+        (page)="onPageChange($event)">
+      </mat-paginator>
+      </div>
+      <div *ngFor="let h_worker of hworkers; let i = index">
+        <!--    <ng-container *ngIf="page * divider >= i+1 && (page -1) * divider < i + 1">-->
+        <div class="worker-box shadow my-5 ml-2 mr-4" [ngStyle]="applyStyle(h_worker.hcw.result_status_id)">
+          <div class="row m-0 justify-content-around">
+            <div class="col-md-4 col-12 pl-3 pt-3 pr-md-4 pr-md-3 pb-md-3 pb-0 d-md-flex d-block worker-info">
+              <div class="col-md-11 col-12 mr-lg-3 mr-0 pr-0 pl-md-1 pl-0">
+                <div class="d-flex justify-content-between align-items-center ">
+                  <Label class="font-weight-bold pointer col-6 p-0 mr-auto" placement="bottom"
+                         [ngbTooltip]="language.update_worker" style="font-size: 16px; color: #444444;"
+                         (click)="updateHealthWorkerDialog(h_worker.hcw)">{{h_worker.hcw.first_name}} {{h_worker.hcw.last_name}}</Label>
+                  <div class="hcw-detail-container" style="font-size: 12px; color: #757575;">
+                    <span [ngbPopover]="hcwDetail" [autoClose]="'outside'" #p="ngbPopover" placement="bottom"
+                          class="pointer">{{language.view_more}}
+                    </span>
+                    <ng-template #hcwDetail>
+                      <span class="close-button pointer" (click)="p.close()">&#10005;</span>
+                      <div class="container p-3">
+                        <div class="d-flex">
+                          <div class="col-7 p-0">{{language.healthcare_worker}}:</div>
+                          <div class="col-5 pr-0 pl-1">{{h_worker.hcw.first_name}} {{h_worker.hcw.last_name}}</div>
+                        </div>
+                        <div class="d-flex">
+                          <div class="col-7 p-0">{{language.department}}:</div>
+                          <div class="col-5 pr-0 pl-1">{{h_worker.hcw.department}}</div>
+                        </div>
+                        <div class="d-flex">
+                          <div class="col-7 p-0">{{language.employee_id}}:</div>
+                          <div class="col-5 pr-0 pl-1">{{h_worker.hcw.employee_id}}</div>
+                        </div>
+                        <div class="d-flex">
+                          <div class="col-7 p-0">{{language.date_of_birth}}:</div>
+                          <div class="col-5 pr-0 pl-1">{{h_worker.hcw.date_of_birth | date: 'dd-MM-yyyy'}}</div>
+                        </div>
+                        <div class="d-flex">
+                          <div class="col-7 p-0">{{language.email + " " + language.address}}:</div>
+                          <div class="col-5 pr-0 pl-1">{{h_worker.hcw.email}}</div>
+                        </div>
+                        <div class="d-flex">
+                          <div class="col-7 p-0">{{language.mobile + " " + language.number}}:</div>
+                          <div class="col-5 pr-0 pl-1">{{h_worker.hcw.phone_number}}</div>
+                        </div>
+                        <div class="d-flex">
+                          <div class="col-7 p-0">{{language.whatsapp + " " + language.number}}:</div>
+                          <div class="col-5 pr-0 pl-1">{{h_worker.hcw.whatsapp_number}}</div>
+                        </div>
+                        <div class="d-flex">
+                          <div class="col-7 p-0">{{language.auto_immune_disease}}:</div>
+                          <div class="col-5 pr-0 pl-1" *ngIf="h_worker.hcw.immunodeficiencies.length > 0">
+                            <span *ngFor="let d of h_worker.hcw.immunodeficiencies">{{d.deficiency_name }} </span>
+                          </div>
+                        </div>
+                        <div class="d-flex">
+                          <div class="col-7 p-0">{{language.chronic_disease}}:</div>
+                          <div class="col-5 pr-0 pl-1" *ngIf="h_worker.hcw.chronic_illnesses.length > 0">
+                            <span *ngFor="let d of h_worker.hcw.chronic_illnesses">{{d.illness_name }} </span>
+                          </div>
+                        </div>
+
+                        <!-- <span *ngIf="!(covid.answer === '1' || covid.answer === '0')">{{covid.answer}}</span> -->
+                      </div>
+                    </ng-template>
+                  </div>
+                  <div class="d-lg-none d-block option-box" style="position: relative;">
+                      <span [ngbPopover]="moreOption" [autoClose]="'outside'" class="material-icons"
+                            style="margin-right: -0.25rem;">more_vert</span>
+                    <ng-template #moreOption>
+                      <div class="container p-1">
+                        <div class="d-flex">
+                          <button type="button" style="text-decoration: none !important" class="btn btn-link"
+                                  style="margin: auto; padding: 0;"
+                                  (click)="takeSurvey('fill_survey', h_worker.hcw.phone_number)">Fill Survey
+                          </button>
+                        </div>
+                        <hr class="m-1">
+                        <div class="d-flex">
+                          <button type="button" style="text-decoration: none !important" class="btn btn-link"
+                                  style="margin: auto; padding: 0;"
+                                  (click)="takeSurvey('resend_survey', h_worker.hcw.phone_number)">Resend Survey
+                          </button>
+                        </div>
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+
+                <div class="d-lg-flex d-none justify-content-between" style="font-size: 14px; color: #757575;">
+                  <div class="col-10 p-0">
+                    <div class=" d-flex justify-content-between">
+                      <div class="col-7 p-0">
+                        {{language.hcw_type_id}} :
+                      </div>
+                      <div class="col-5 pl-2 pr-0">
+                        {{h_worker.hcw.first_name}}
+                      </div>
+                    </div>
+                    <div class=" d-flex justify-content-between">
+                      <div class="col-7 p-0">
+                        {{language.department}} :
+                      </div>
+                      <div class="col-5 pl-2 pr-0">
+                        {{h_worker.hcw.department}}
+                      </div>
+                    </div>
+                    <div class=" d-flex justify-content-between">
+                      <div class="col-7 p-0">
+                        {{language.mobile_number}} :
+                      </div>
+                      <div class="col-5 pl-2 pr-0">
+                        {{h_worker.hcw.phone_number}}
+                      </div>
+                    </div>
+                    <div class=" d-flex justify-content-between">
+                      <div class="col-7 p-0">
+                        {{language.whatsapp_number}} :
+                      </div>
+                      <div class="col-5 pl-2 pr-0">
+                        {{h_worker.hcw.whatsapp_number}}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="mr-2 icon-popover-detail" style="width: 12px;">
+                    <img class="p-1"
+                         *ngIf=" h_worker.hcw.date_of_birth && checkAge(h_worker.hcw.date_of_birth | date: 'yyyy')"
+                         src="../../assets/old_lady.png"
+                         [ngbPopover]="ageDetails"
+                         triggers="mouseenter:mouseleave"
+                         placement="right"
+                         style="size: 5px;">
+                    <ng-template #ageDetails>
+                      <div class="p-3">
+                        {{getAgeFromDOB(h_worker.hcw.date_of_birth)}} {{language.years}}
+                      </div>
+                    </ng-template>
+                    <img class="p-1"
+                         *ngIf="h_worker.hcw.chronic_illnesses.length > 0"
+                         src="../../assets/chronic.png"
+                         [ngbPopover]="chronicIllnessDetails"
+                         triggers="mouseenter:mouseleave"
+                         placement="right"
+                         style="size: 5px;">
+                    <ng-template #chronicIllnessDetails>
+                      <div class="p-3">
+                        <p class="m-0" *ngFor="let illness of h_worker.hcw.chronic_illnesses">
+                          {{illness.illness_name}}
+                        </p>
+                      </div>
+                    </ng-template>
+                    <img class="p-1"
+                         *ngIf="h_worker.hcw.immunodeficiencies.length > 0"
+                         src="../../assets/immunodeficiency.png"
+                         [ngbPopover]="immunoDefDetails"
+                         triggers="mouseenter:mouseleave"
+                         placement="right"
+                         style="size: 5px;">
+                    <ng-template #immunoDefDetails>
+                      <div class="p-3">
+                        <p class="m-0" *ngFor="let deficiency of h_worker.hcw.immunodeficiencies">
+                          {{deficiency.deficiency_name}}
+                        </p>
+                      </div>
+                    </ng-template>
+                  </div>
+
+                </div>
+
+                <div class="row d-lg-none d-block">
+                  <div class="d-flex flex-wrap w-100" style="font-size: 14px; color: #757575; margin-left: -15px;">
+                    <div class="d-flex py-2 col-md-12 col-6 w-100" style="width: 45%;">
+                      <div class="col-2">
+                        <img src="../../assets/hospital.png" style="height: 14px;">
+                      </div>
+                      <div class="col-10 pr-0 pl-md-3 pl-2">
+                        {{h_worker.hcw.first_name}}
+                      </div>
+                    </div>
+                    <div class="d-flex py-2 col-md-12 col-6 w-100" style="width: 55%;">
+                      <div class="col-2">
+                        <img src="../../assets/doctor.png" style="height: 14px;">
+                      </div>
+                      <div class="col-10 pr-0 pl-md-3 pl-2">
+                        {{h_worker.hcw.department}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-wrap w-100" style="font-size: 14px; color: #757575; margin-left: -15px;">
+                    <div class="d-flex py-2 col-md-12 col-6 w-100" style="width: 45%;">
+                      <div class="col-2">
+                        <img src="../../assets/phone.png" style="height: 14px;">
+                      </div>
+                      <div class="col-10 pr-0 pl-md-3 pl-2">
+                        {{h_worker.hcw.phone_number}}
+                      </div>
+                    </div>
+                    <div class="d-flex py-2 col-md-12 col-6 w-100" style="width: 55%;">
+                      <div class="col-2">
+                        <img src="../../assets/whatsapp.png" style="height: 14px;">
+                      </div>
+                      <div class="col-10 pr-0 pl-md-3 pl-2" style="font-size: 14px;">
+                        {{h_worker.hcw.whatsapp_number}}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="m-3 custom-divider"></div>
+            </div>
+
+            <div class="col-md-8 col-12 py-2 pl-2 pr-md-5 pr-2">
+              <div class="d-flex flex-lg-nowrap flex-wrap">
+                <div class=" my-auto ml-lg-3 mx-0 p-2 mr-auto">
+                  {{language.last_known_exposure}} :
+                  <span
+                    *ngIf="h_worker.hcw.result_status_id">{{h_worker.hcw.date_positive | date : 'dd/MM/yyyy'}}</span>
+                </div>
+                <div class="d-flex" [ngbPopover]="status_message" triggers="hover" placement = "{{popover.isOpen() ? 'top' : 'bottom'}}">
+                  <ng-template #status_message class="status-msg">
+                    <div *ngIf="getStatusMessage(h_worker.hcw.result_status_id)"
+                         class="p-1">{{getStatusMessage(h_worker.hcw.result_status_id)}}</div>
+                  </ng-template>
+                  <label class="m-2">{{language.status}}</label>
+                  <!-- <div class="float-right" [ngbPopover]="status_message" triggers="hover" placement="bottom"> -->
+                  <div class="" [ngbPopover]="dropdown" #popover="ngbPopover" placement="bottom" class="action-button d-flex"
+                       [class.positive_case]="h_worker.hcw.result_status_id === 4" style=" border-radius: 0.4rem;">
+
+                    <ng-template #dropdown class="dropdown-container">
+                      <ng-container *ngFor="let action of actions; let in = index">
+                        <div class="action-panel dropdown-boxes "
+                             (click)="saveStatus(in, h_worker.hcw.phone_number, i)">{{action.result_status}}</div>
+                      </ng-container>
+                    </ng-template>
+                    <div class="m-auto">
+                      <span class="font-weight-bold"
+                            *ngIf="h_worker.hcw.result_status_id === null">{{language['no_action']}}</span>
+                      <span class="font-weight-bold" id="status_change"
+                            [ngStyle]="setFontColor(h_worker.hcw.result_status_id)">{{actionsDictionary[h_worker.hcw.result_status_id]}}</span>
+                    </div>
+                    <span class="m-auto pl-2"><img src="../../assets/arrow.png"></span>
+                  </div>
+                </div>
+                <!-- </div> -->
+                <div id="div_border" class="mx-2 d-lg-block d-none" style="border-left: 1px solid #eeeeee;"></div>
+
+                <button class="d-lg-block d-none btn btn-link font-weight-bold" style="text-decoration: none !important"
+                        (click)="takeSurvey('resend_survey', h_worker.hcw.phone_number)">{{language.resend_survey}}</button>
+                <div class="d-lg-block d-none" style="border-left: 1px solid #eeeeee;"></div>
+                <button class="d-lg-block d-none btn btn-link font-weight-bold" style="text-decoration: none !important"
+                        (click)="takeSurvey('fill_survey', h_worker.hcw.phone_number)">{{language.fill_survey}}</button>
+              </div>
+
+              <div class="dates-row-container">
+                <div class="d-flex  mt-3 dates-row">
+                  <ng-container *ngFor="let date1 of dates; let di = index">
+                    <div class="date-intervals m-1 py-1 px-2 text-center"
+                         style="background-color: #eeeeee; height: 72px; border-radius: 0.2rem;">
+                      <div style="display: table" class="">
+                        <!--              <span>{{daily_report.submitted_time.split('-')[2].split('T')[0]}}</span>/<span>{{daily_report.submitted_time.split('-')[1]}}</span>-->
+                        <!--              <span>{{date.split('-')[2].split('T')[0]}}</span>/<span>{{daily_report.submitted_time.split('-')[1]}}</span>-->
+                        <span>{{ date1 | date:"dd/MM" }}</span>
+                      </div>
+                      <div class="mt-3">
+                        <span *ngIf="sortByDate(h_worker.survey_list, date1 | date: 'dd/MM') === null"></span>
+                        <span [ngbPopover]="popContent" class="text-center"
+                              *ngIf="sortByDate(h_worker.survey_list, date1 | date: 'dd/MM' ) === false"
+                              style=" background-color: #eeeeee;" placement="bottom">
+                            <!-- <i *ngIf = "(di === dates.length - 1) && h_worker.hcw.result_status_id === 9" class="material-icons icon-view" style="color: green; font-size: 36px;">done</i> -->
+                            <img src="../../assets/Path.png"
+                                 *ngIf="(((h_worker.hcw.result_status_id !== 7) && (h_worker.hcw.result_status_id !== 8) && (h_worker.hcw.result_status_id !== 9) && (h_worker.hcw.result_status_id !== 10)) || (di !== dates.length - 1))"
+                                 class="material-icons icon-view" style="color: green; font-size: 36px;">
+                            <img src="../../assets/home.png"
+                                 *ngIf="(di === dates.length - 1) && (h_worker.hcw.result_status_id === 7 || h_worker.hcw.result_status_id === 9)"
+                                 class="material-icons icon-view" style="color: green; font-size: 36px;">
+                            <img src="../../assets/precaution.png"
+                                 *ngIf="(di === dates.length - 1) && (h_worker.hcw.result_status_id === 10 || h_worker.hcw.result_status_id === 8)"
+                                 class="material-icons icon-view" style="color: green; font-size: 36px;">
+                          </span>
+                        <span [ngbPopover]="popContent" class="text-center"
+                              *ngIf="sortByDate(h_worker.survey_list, date1 | date: 'dd/MM' ) === true"
+                              style=" background-color: #eeeeee;" placement="bottom"><i class="material-icons icon-view"
+                                                                                        style="color: red; font-size: 36px;">report_problem</i></span>
+
+
+                        <ng-template #popContent class="popover-container">
+                          <div class="popover-content" *ngFor="let symptom of h_worker.survey_list; let i = index">
+                            <ng-container *ngIf="symptom.survey_instance.submitted_time">
+                              <ng-container
+                                *ngIf="symptom.survey_instance.submitted_time.split('-')[2].split('T')[0] == date1.getDate()">
+                                <span
+                                  class="popover-date">{{symptom.survey_instance.submitted_time | date : 'medium'}}</span>
+                                <div *ngIf="symptom.survey_answers.length === 0">
+                                  <span>No Form submitted</span>
+                                </div>
+                                <ng-container *ngIf="symptom.survey_answers.length > 0">
+                                  <div *ngFor="let covid of symptom.survey_answers; let i = index">
+                                    <ng-container *ngIf="i">
+                                      <span>{{problems[i].question_text}}</span> : &nbsp;
+                                      <span
+                                        *ngIf="covid.answer === '1' || covid.answer === '0'">{{language[covid.answer]}}</span>
+                                      <span
+                                        *ngIf="problems[i].question_text.toLowerCase().includes('date') && !(covid.answer === '1' || covid.answer === '0')">{{covid.answer | date : 'dd-MM-yyyy'}}</span>
+                                      <span
+                                        *ngIf="!problems[i].question_text.toLowerCase().includes('date') && !(covid.answer === '1' || covid.answer === '0')">{{covid.answer}}</span>
+                                    </ng-container>
+                                  </div>
+                                  <span class="vertical-space" *ngIf="i === symptom.survey_answers.length - 1"> </span>
+                                </ng-container>
+                              </ng-container>
+                            </ng-container>
+                          </div>
+                        </ng-template>
+
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- <div class="worker-box">
+          <div class="row p-2">
+            <div class="col-5">
+              <div class="row">
+                <div class="col-6 font-weight-bold pointer" (click)="updateHealthWorkerDialog(h_worker.hcw)">
+                  {{h_worker.hcw.first_name}} {{h_worker.hcw.last_name}}
+                </div>
+                <div class="col-6">
+                  <ng-template #status_message class="status-msg">
+                    <div class="p-1" *ngIf="h_worker.hcw.result_status_id">{{actions[h_worker.hcw.result_status_id - 1]?.result_message}}</div>
+                  </ng-template>
+                  <div [ngbPopover]="status_message" triggers="hover" placement="bottom">
+                  <div class="action-button p-2 d-flex" [class.positive_case]="h_worker.hcw.result_status_id === 4">
+                      <div>
+                        <span *ngIf="h_worker.hcw.result_status_id === 4"><i class="material-icons icon-view mr-1">report_problem</i></span>
+                        <span *ngIf="h_worker.hcw.result_status_id !== 4"><i class="material-icons icon-view negative-icon mr-1">remove</i></span>
+                        <span *ngIf="h_worker.hcw.result_status_id === null">{{language['no_action']}}</span>
+                        <span id="status_change" *ngIf="h_worker.hcw.result_status_id">{{actions[h_worker.hcw.result_status_id - 1]?.result_status}}</span>
+                      </div>
+                      <div  *ngIf="h_worker.hcw.result_status_id === 4 && !isStatusDropdownChanged" class="confirmation-date">{{language.confirmed}}  {{h_worker.hcw.date_positive | date: 'dd/MM/yyyy'}}</div>
+                      <div  *ngIf="h_worker.hcw.result_status_id === 4 && isStatusDropdownChanged" class="confirmation-date">{{language.confirmed}}  {{todayNewDate | date : 'dd/MM/yyyy'}}</div>
+                    <span class="space-section"></span>
+                    <span [ngbPopover]="dropdown" class="dropdown-box pointer"><i class=" custom-dropdown-caret arrow-down"></i></span>
+                    <ng-template #dropdown class="dropdown-container">
+                      <ng-container *ngFor="let action of actions" >
+                        <div class="action-panel dropdown-boxes" (click)="saveStatus(action.id, h_worker.hcw.phone_number, i)">{{action.result_status}}</div>
+                      </ng-container>
+                    </ng-template>
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-7">
+              <div class="row worker-label">
+                <div class="col-3">
+                  <div>{{language.hcw_type_id}}:</div>
+                  <div class="worker-input">
+                    <span *ngIf="h_worker.hcw.hcw_type_id">{{h_worker.hcw.hcw_type_id ? this.hwcLists[h_worker.hcw.hcw_type_id - 1]?.hcw_type_name : '-'}}</span>
+                  </div>
+                  <div>{{language.department}}:</div>
+                  <div class="worker-input">{{h_worker.hcw.department ? h_worker.hcw.department : '-'}}</div>
+                </div>
+                <div class="col-3">
+                  <div>{{language.employee_id}}:</div>
+                  <div class="worker-input">{{h_worker.hcw.employee_id ? h_worker.hcw.employee_id : '-'}}</div>
+                  <div>{{language.email}}:</div>
+                  <div class="worker-input">{{h_worker.hcw.email ? h_worker.hcw.email : '-'}}</div>
+                </div>
+                <div class="col-3">
+                  <div>{{language.phone_no}}:</div>
+                  <div class="worker-input">{{h_worker.hcw.phone_number ? h_worker.hcw.phone_number : '-'}}</div>
+                  <div>{{language.whatsapp}}:</div>
+                  <div class="worker-input">{{h_worker.hcw.whatsapp_number ? h_worker.hcw.whatsapp_number : '-'}}</div></div>
+                <div class="col-3">
+                    <div>{{language.date_of_birth}}:</div>
+                    <div class="worker-input">{{h_worker.hcw.date_of_birth ? (h_worker.hcw.date_of_birth | date : 'dd/MM/yyyy') : '-'}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <mat-divider></mat-divider>
+          <div class="row p-2">
+            <div class="col-3">
+              <div class="survey-history">{{language.surveyReport}}</div>
+              <div class="survey-date">
+                <div> {{language.last_known_exposure}}:</div>
+                <div> <span *ngIf="!h_worker.hcw.result_status_id"> {{language.not_yet}} </span>
+                  <span *ngIf="h_worker.hcw.result_status_id">{{h_worker.hcw.date_positive | date : 'dd/MM/yyyy'}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-7 d-flex">
+              <ng-container  *ngFor="let date1 of dates">
+                <ng-template #popContent class="popover-container">
+                  <div class="popover-content" *ngFor="let symptom of h_worker.survey_list; let i = index">
+                    <ng-container *ngIf="symptom.survey_instance.submitted_time">
+                      <ng-container *ngIf="symptom.survey_instance.submitted_time.split('-')[2].split('T')[0] == date1.getDate()">
+                        <span class="popover-date">{{symptom.survey_instance.submitted_time | date : 'medium'}}</span>
+                        <div *ngIf="symptom.survey_answers.length === 0">
+                          <span>No Form submitted</span>
+                        </div>
+                        <ng-container *ngIf="symptom.survey_answers.length > 0">
+                          <div *ngFor="let covid of symptom.survey_answers; let i = index">
+                            <ng-container *ngIf="i">
+                              <span>{{problems[i].question_text}}</span> : &nbsp;
+                              <span *ngIf="covid.answer === '1' || covid.answer === '0'">{{language[covid.answer]}}</span>
+                              <span *ngIf="!(covid.answer === '1' || covid.answer === '0')">{{covid.answer}}</span>
+                            </ng-container>
+                          </div>
+                          <span class="vertical-space" *ngIf="i === symptom.survey_answers.length - 1"> </span>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                  </div>
+                </ng-template>
+                <div class="date-intervals">
+                  <div style="display: table" class="m-auto">
+                                 <span>{{daily_report.submitted_time.split('-')[2].split('T')[0]}}</span>/<span>{{daily_report.submitted_time.split('-')[1]}}</span>
+                                 <span>{{date.split('-')[2].split('T')[0]}}</span>/<span>{{daily_report.submitted_time.split('-')[1]}}</span> -->
+        <!-- <span>{{ date1 | date:"dd/MM" }}</span>
+  </div>
+  <div class="empty-box">
+    <span *ngIf="sortByDate(h_worker.survey_list, date1 | date: 'dd/MM') === null" ></span>
+    <span [ngbPopover]="popContent" class="bg-white" *ngIf="sortByDate(h_worker.survey_list, date1 | date: 'dd/MM' ) === false"  placement="bottom"><i class="material-icons icon-view" style="color: green">done</i></span>
+    <span [ngbPopover]="popContent"  class="bg-white" *ngIf="sortByDate(h_worker.survey_list, date1 | date: 'dd/MM' ) === true"  placement="bottom"><i class="material-icons icon-view" style="color: red">report_problem</i></span>
+  </div>
+</div>
+</ng-container>
+</div>
+<div class="col-2">
+<div class="float-right">
+<mat-form-field>
+  <mat-label>{{language.action}}</mat-label>
+  <mat-select>
+    <mat-option  (click)="takeSurvey('fill_survey', h_worker.hcw.phone_number)">{{language.fill_survey}}</mat-option>
+    <mat-option *ngIf="h_worker.hcw.whatsapp_number" (click)="takeSurvey('resend_survey', h_worker.hcw.phone_number)">{{language.resend_survey}}</mat-option>
+  </mat-select>
+</mat-form-field>
+</div>
+</div>
+</div>
+</div> -->
+
+
+      </div>
+      <mat-paginator
+        class="mx-5 mb-4 d-md-none d-block"
+        style="margin-left: auto !important; margin-right: 0 !important;"
+        *ngIf="pageSize"
+        [length]="totalWorkers"
+        [pageSize]="pageSize"
+        [pageIndex]="pageIndex"
+        [hidePageSize]="true"
+        [disabled]="loadingReports"
+        (page)="onPageChange($event)">
+      </mat-paginator>
+    </div>
+  </div>
+<!--</div>-->
+
+
+<!--<<div *ngIf="false">-->
+
+<!--  <div class="toolbar  shadow">-->
+<!--    <div class="logo  align-self-stretch px-0 py-0 d-flex" style="font-size: 17px; height: 52px;">-->
+<!--      <span *ngIf="!searchOn" class="mr-auto my-auto ml-3"-->
+<!--            style="height: 17px; font-size: 17px;">{{language.facility_health_center}}</span>-->
+<!--      <input *ngIf="searchOn" class="mr-auto w-100 pl-2" style=" font-size: 17px;" [(ngModel)]="search" type="text"-->
+<!--             placeholder="{{language.search}}">-->
+
+
+<!--      &lt;!&ndash; <button mat-flat-button (click)= "searchReports()"> &ndash;&gt;-->
+<!--      <img class="my-auto mr-4 ml-2" src="assets/search.png" alt="search icon" style="width: 20px; height: 20px;"-->
+<!--           (click)="searchClicked()">-->
+<!--      &lt;!&ndash; </button> &ndash;&gt;-->
+<!--      <div class="option-box-2">-->
+<!--        <img [ngbPopover]="menuToggle" [autoClose]="'outside'" #p="ngbPopover" placement="left" class="my-auto mr-3"-->
+<!--             src="assets/menu.png" alt="{{language.logout}}"-->
+<!--             style="width: 20px; height: 20px; margin-top: 1rem !important;">-->
+<!--        <ng-template #menuToggle>-->
+<!--          <div class="container p-1">-->
+<!--            <div class="d-flex">-->
+<!--              <button type="button" style="text-decoration: none !important" class="btn btn-link"-->
+<!--                      style="margin: auto; padding: 0;"><span>admin@hospital.com</span></button>-->
+<!--            </div>-->
+<!--            <hr class="m-1">-->
+<!--            <div class="d-flex">-->
+<!--              <button type="button" style="text-decoration: none !important" class="btn btn-link"-->
+<!--                      style="margin: auto; padding: 0;" (click)="logout()">Logout-->
+<!--              </button>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </ng-template>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    &lt;!&ndash; <div class="search-bar d-flex">-->
+<!--      <input [(ngModel)] = "search" class="px-3 py-2" type="text" placeholder="{{language.search}}">-->
+
+<!--    </div>-->
+<!--    <span class="space-section"></span>-->
+<!--    <div class="profile-section pointer">-->
+<!--      <img src="assets/profile-image.png" alt="">-->
+<!--      <span>admin@hospital.com</span>-->
+<!--    </div>-->
+<!--    <mat-divider class="my-2 align-self-stretch" vertical="true"></mat-divider>-->
+<!--    <div class="logout-icon pointer px-1 mr-4">-->
+<!--      <button mat-flat-button (click)="logout()">-->
+<!--      </button> &ndash;&gt;-->
+<!--    &lt;!&ndash; </div> &ndash;&gt;-->
+<!--    &lt;!&ndash; <div class="container-fluid py-0">-->
+<!--      <mat-toolbar class="toolbar">-->
+<!--        <mat-toolbar-row>-->
+<!--          <div class="logo h-100 p-3 d-flex align-items-center">{{language.facility_health_center}}</div>-->
+<!--          <span class="space-section"></span>-->
+<!--          <div class="profile-section">-->
+<!--            <div>admin@hospital.com</div>-->
+<!--            <div class="float-right pointer" (click)="logout()">{{language.logout}}-->
+<!--              <i class="material-icons icon-view v-align-mid">keyboard_arrow_right</i></div>-->
+<!--          </div>-->
+<!--        </mat-toolbar-row>-->
+<!--      </mat-toolbar> &ndash;&gt;-->
+
+
+<!--    &lt;!&ndash; DONT MAKE ANY CHANGE AFTER THIS LINE &ndash;&gt;-->
+
+
+<!--    <div class="p-2 m-0">-->
+<!--      <div class="align-self-stretch pl-1 d-flex m-auto">-->
+<!--        <div class="mr-auto font-weight-bold my-auto" style="font-size: 16px; color: #444444;">-->
+<!--          {{language.professionals_reporting_to_you}}-->
+<!--        </div>-->
+<!--        <span class="space-section"></span>-->
+<!--        &lt;!&ndash; <div>-->
+<!--          <input type="text" class="mr-2 search-button pl-3" [placeholder]=language.search (change)="searchUser($event)">-->
+<!--        </div> &ndash;&gt;-->
+<!--        <button class="btn btn-link p-0" (click)="openHealthWorkerDialog()"><img src="../../assets/addWorker.png"-->
+<!--                                                                                 style="height: 30px; width: 30px;">-->
+<!--        </button>-->
+<!--        <button class="btn btn-link p-0" style="height: 48px; width: 48px;"><img src="../../assets/importWorker.png"-->
+<!--                                                                                 style="height: 30px; width: 30px;">-->
+<!--        </button>-->
+<!--      </div>-->
+<!--      <div class="worker-survey-report">-->
+
+
+<!--        <div *ngFor="let h_worker of hworkers; let i = index">-->
+
+<!--          <div class="worker-box shadow my-5 mx-3" [ngStyle]="applyStyle(h_worker.hcw.result_status_id)">-->
+<!--            <div class="">-->
+<!--              <div class="row w-100 m-0 p-0">-->
+<!--                <div class="d-flex justify-content-between p-2 align-items-center w-100">-->
+<!--                  <Label class="font-weight-bold pointer mr-auto my-auto col-6 p-0"-->
+<!--                         style="font-size: 16px; color: #444444;"-->
+<!--                         (click)="updateHealthWorkerDialog(h_worker.hcw)">{{h_worker.hcw.first_name}} {{h_worker.hcw.last_name}}</Label>-->
+<!--                  <div class="hcw-detail-container-2" style="font-size: 12px; color: #757575; position: relative;">-->
+<!--                    <span [ngbPopover]="hcwDetail" [autoClose]="'outside'" #p="ngbPopover" placement="bottom"-->
+<!--                          class="pointer">{{language.view_more}}</span>-->
+<!--                    <ng-template #hcwDetail>-->
+<!--                      <span class="close-button pointer" (click)="p.close()">&#10005;</span>-->
+<!--                      <div class="container p-3">-->
+<!--                        <div class="d-flex">-->
+<!--                          <div class="col-7 p-0">{{language.healthcare_worker}}:</div>-->
+<!--                          <div class="col-5 pr-0 pl-1">{{h_worker.hcw.first_name}} {{h_worker.hcw.last_name}}</div>-->
+<!--                        </div>-->
+<!--                        <div class="d-flex">-->
+<!--                          <div class="col-7 p-0">{{language.department}}:</div>-->
+<!--                          <div class="col-5 pr-0 pl-1">{{h_worker.hcw.department}}</div>-->
+<!--                        </div>-->
+<!--                        <div class="d-flex">-->
+<!--                          <div class="col-7 p-0">{{language.employee_id}}:</div>-->
+<!--                          <div class="col-5 pr-0 pl-1">{{h_worker.hcw.employee_id}}</div>-->
+<!--                        </div>-->
+<!--                        <div class="d-flex">-->
+<!--                          <div class="col-7 p-0">{{language.date_of_birth}}:</div>-->
+<!--                          <div class="col-5 pr-0 pl-1">{{h_worker.hcw.date_of_birth}}</div>-->
+<!--                        </div>-->
+<!--                        <div class="d-flex">-->
+<!--                          <div class="col-7 p-0">{{language.email + " " + language.address}}:</div>-->
+<!--                          <div class="col-5 pr-0 pl-1">{{h_worker.hcw.email}}</div>-->
+<!--                        </div>-->
+<!--                        <div class="d-flex">-->
+<!--                          <div class="col-7 p-0">{{language.mobile + " " + language.number}}:</div>-->
+<!--                          <div class="col-5 pr-0 pl-1">{{h_worker.hcw.phone_number}}</div>-->
+<!--                        </div>-->
+<!--                        <div class="d-flex">-->
+<!--                          <div class="col-7 p-0">{{language.whatsapp + " " + language.number}}:</div>-->
+<!--                          <div class="col-5 pr-0 pl-1">{{h_worker.hcw.whatsapp_number}}</div>-->
+<!--                        </div>-->
+<!--                        <div class="d-flex">-->
+<!--                          <div class="col-7 p-0">{{language.auto_immune_disease}}:</div>-->
+<!--                          <div class="col-5 pr-0 pl-1" *ngIf="h_worker.hcw.immunodeficiencies.length > 0">-->
+<!--                            <span *ngFor="let d of h_worker.hcw.immunodeficiencies">{{d.deficiency_name }} </span>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                        <div class="d-flex">-->
+<!--                          <div class="col-7 p-0">{{language.chronic_disease}}</div>-->
+<!--                          <div class="col-5 pr-0 pl-1" *ngIf="h_worker.hcw.chronic_illnesses.length > 0">-->
+<!--                            <span *ngFor="let d of h_worker.hcw.chronic_illnesses">{{d.illness_name }} </span>-->
+<!--                          </div>-->
+<!--                        </div>-->
+
+<!--                        &lt;!&ndash; <span *ngIf="!(covid.answer === '1' || covid.answer === '0')">{{covid.answer}}</span> &ndash;&gt;-->
+<!--                      </div>-->
+<!--                    </ng-template>-->
+<!--                  </div>-->
+<!--                  <div class="option-box" style="position: relative;">-->
+<!--                    <span [ngbPopover]="moreOption" [autoClose]="'outside'" #p="ngbPopover" class="material-icons"-->
+<!--                          style="margin-right: -0.25rem;">more_vert</span>-->
+<!--                    <ng-template #moreOption>-->
+<!--                      <div class="container p-1">-->
+<!--                        <div class="d-flex">-->
+<!--                          <button type="button" style="text-decoration: none !important" class="btn btn-link"-->
+<!--                                  style="margin: auto; padding: 0;"-->
+<!--                                  (click)="takeSurvey('fill_survey', h_worker.hcw.phone_number)">Fill Survey-->
+<!--                          </button>-->
+<!--                        </div>-->
+<!--                        <hr class="m-1">-->
+<!--                        <div class="d-flex">-->
+<!--                          <button type="button" style="text-decoration: none !important" class="btn btn-link"-->
+<!--                                  style="margin: auto; padding: 0;"-->
+<!--                                  (click)="takeSurvey('resend_survey', h_worker.hcw.phone_number)">Resend Survey-->
+<!--                          </button>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </ng-template>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--              <div class="row">-->
+<!--                <div class="d-flex w-100" style="font-size: 14px; color: #757575;">-->
+<!--                  <div class="d-flex p-2 pl-0" style="width: 45%;">-->
+<!--                    <div class="col-2">-->
+<!--                      <img src="../../assets/hospital.png" style="height: 14px;">-->
+<!--                    </div>-->
+<!--                    <div class="col-10">-->
+<!--                      {{h_worker.hcw.first_name}}-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="d-flex p-2 pl-0" style="width: 55%;">-->
+<!--                    <div class="col-2">-->
+<!--                      <img src="../../assets/doctor.png" style="height: 14px;">-->
+<!--                    </div>-->
+<!--                    <div class="col-10">-->
+<!--                      {{h_worker.hcw.department}}-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div class="d-flex w-100" style="font-size: 14px; color: #757575;">-->
+<!--                  <div class="d-flex p-2 pl-0" style="width: 45%;">-->
+<!--                    <div class="col-2">-->
+<!--                      <img src="../../assets/phone.png" style="height: 14px;">-->
+<!--                    </div>-->
+<!--                    <div class="col-10">-->
+<!--                      {{h_worker.hcw.phone_number}}-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="d-flex p-2 pl-0" style="width: 55%;">-->
+<!--                    <div class="col-2">-->
+<!--                      <img src="../../assets/whatsapp.png" style="height: 14px;">-->
+<!--                    </div>-->
+<!--                    <div class="col-10" style="font-size: 14px;">-->
+<!--                      {{h_worker.hcw.whatsapp_number}}-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+
+<!--                <hr class="m-auto p-0 my-2" style="width: 85%;">-->
+
+<!--              </div>-->
+<!--            </div>-->
+
+<!--            <div class="row my-1">-->
+<!--              <div class="mx-3 p-2 mr-auto" style="font-size: 14px; color: #444444;">-->
+<!--                {{language.last_known_exposure}} :-->
+<!--                <span *ngIf="h_worker.hcw.result_status_id">{{h_worker.hcw.date_positive | date : 'dd/MM/yyyy'}}</span>-->
+<!--              </div>-->
+<!--            </div>-->
+
+<!--            <div class="row my-1">-->
+<!--              <div class="d-flex mx-3 px-2 w-100"-->
+<!--                   style="font-size: 14px; color: #444444; margin-right: 1rem !important; position: relative;">-->
+<!--                <label class="my-auto mr-auto">{{language.status}}</label>-->
+
+<!--                <div class="my-auto" [ngbPopover]="dropdown" placement="bottom" class="action-button d-flex"-->
+<!--                     style=" border-radius: 0.4rem;">-->
+
+<!--                  <ng-template #dropdown class="dropdown-container">-->
+<!--                    <ng-container *ngFor="let action of actions; let in = index">-->
+<!--                      <div class="action-panel dropdown-boxes "-->
+<!--                           (click)="saveStatus(in, h_worker.hcw.phone_number, i)">{{action.result_status}}</div>-->
+<!--                    </ng-container>-->
+<!--                  </ng-template>-->
+<!--                  <div class="mr-0 py-1" style="font-size: 14px;">-->
+<!--                    <span class="font-weight-bold"-->
+<!--                          *ngIf="h_worker.hcw.result_status_id === null">{{language['no_action']}}</span>-->
+<!--                    <span class="font-weight-bold" id="status_change"-->
+<!--                          [ngStyle]="setFontColor(h_worker.hcw.result_status_id)">{{actionsDictionary[h_worker.hcw.result_status_id]}}</span>-->
+<!--                  </div>-->
+<!--                  <span class="m-auto pl-2"><img src="../../assets/arrow.png"></span>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+
+
+<!--            <div class="d-flex" style=" padding: 0.5rem 2.5rem;">-->
+<!--              <div class="p-2" style="font-size: 14px; color: #444444;" style="overflow: auto;">-->
+<!--                <div class=" d-flex scrollmenu" style="overflow: auto; white-space: nowrap;">-->
+<!--                  <div *ngFor="let date1 of dates; let di = index">-->
+<!--                    <div class="date-intervals m-1 py-1 px-2 text-center"-->
+<!--                         style="background-color: #eeeeee; height: 72px; border-radius: 0.2rem;">-->
+<!--                      <div style="" class="">-->
+<!--                        &lt;!&ndash;              <span>{{daily_report.submitted_time.split('-')[2].split('T')[0]}}</span>/<span>{{daily_report.submitted_time.split('-')[1]}}</span>&ndash;&gt;-->
+<!--                        &lt;!&ndash;              <span>{{date.split('-')[2].split('T')[0]}}</span>/<span>{{daily_report.submitted_time.split('-')[1]}}</span>&ndash;&gt;-->
+<!--                        <span>{{ date1 | date:"dd/MM" }}</span>-->
+<!--                      </div>-->
+<!--                      <div class="mt-3">-->
+<!--                        <span *ngIf="sortByDate(h_worker.survey_list, date1 | date: 'dd/MM') === null"></span>-->
+<!--                        <span [ngbPopover]="popContent" class="text-center"-->
+<!--                              *ngIf="sortByDate(h_worker.survey_list, date1 | date: 'dd/MM' ) === false"-->
+<!--                              style=" background-color: #eeeeee;" placement="bottom">-->
+<!--                        &lt;!&ndash; <i *ngIf = "(di === dates.length - 1) && h_worker.hcw.result_status_id === 9" class="material-icons icon-view" style="color: green; font-size: 36px;">done</i> &ndash;&gt;-->
+<!--                        <img src="../../assets/Path.png"-->
+<!--                             *ngIf="(((h_worker.hcw.result_status_id !== 7) && (h_worker.hcw.result_status_id !== 8) && (h_worker.hcw.result_status_id !== 9) && (h_worker.hcw.result_status_id !== 10)) || (di !== dates.length - 1))"-->
+<!--                             class="material-icons icon-view" style="color: green; font-size: 36px;">-->
+<!--                        <img src="../../assets/home.png"-->
+<!--                             *ngIf="(di === dates.length - 1) && (h_worker.hcw.result_status_id === 7 || h_worker.hcw.result_status_id === 9)"-->
+<!--                             class="material-icons icon-view" style="color: green; font-size: 36px;">-->
+<!--                        <img src="../../assets/precaution.png"-->
+<!--                             *ngIf="(di === dates.length - 1) && (h_worker.hcw.result_status_id === 10 || h_worker.hcw.result_status_id === 8)"-->
+<!--                             class="material-icons icon-view" style="color: green; font-size: 36px;">-->
+<!--                      </span>-->
+<!--                        <span [ngbPopover]="popContent" class="text-center"-->
+<!--                              *ngIf="sortByDate(h_worker.survey_list, date1 | date: 'dd/MM' ) === true"-->
+<!--                              style=" background-color: #eeeeee;" placement="bottom"><i class="material-icons icon-view"-->
+<!--                                                                                        style="color: red; font-size: 36px;">report_problem</i></span>-->
+
+
+<!--                        <ng-template #popContent class="popover-container">-->
+<!--                          <div class="popover-content" *ngFor="let symptom of h_worker.survey_list; let i = index">-->
+<!--                            <ng-container *ngIf="symptom.survey_instance.submitted_time">-->
+<!--                              <ng-container-->
+<!--                                *ngIf="symptom.survey_instance.submitted_time.split('-')[2].split('T')[0] == date1.getDate()">-->
+<!--                                <span-->
+<!--                                  class="popover-date">{{symptom.survey_instance.submitted_time | date : 'medium'}}</span>-->
+<!--                                <div *ngIf="symptom.survey_answers.length === 0">-->
+<!--                                  <span>No Form submitted</span>-->
+<!--                                </div>-->
+<!--                                <ng-container *ngIf="symptom.survey_answers.length > 0">-->
+<!--                                  <div *ngFor="let covid of symptom.survey_answers; let i = index">-->
+<!--                                    <ng-container *ngIf="i">-->
+<!--                                      <span>{{problems[i].question_text}}</span> : &nbsp;-->
+<!--                                      <span-->
+<!--                                        *ngIf="covid.answer === '1' || covid.answer === '0'">{{language[covid.answer]}}</span>-->
+<!--                                      <span-->
+<!--                                        *ngIf="!(covid.answer === '1' || covid.answer === '0')">{{covid.answer}}</span>-->
+<!--                                    </ng-container>-->
+<!--                                  </div>-->
+<!--                                  <span class="vertical-space" *ngIf="i === symptom.survey_answers.length - 1"> </span>-->
+<!--                                </ng-container>-->
+<!--                              </ng-container>-->
+<!--                            </ng-container>-->
+<!--                          </div>-->
+<!--                        </ng-template>-->
+
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+
+
+<!--          </div>-->
+<!--        </div>-->
+
+
+<!--        <mat-paginator-->
+<!--          class="mx-5 mb-4"-->
+<!--          style="margin-left: auto !important; margin-right: 0 !important;"-->
+<!--          *ngIf="pageSize"-->
+<!--          [length]="totalWorkers"-->
+<!--          [pageSize]="pageSize"-->
+<!--          [pageIndex]="pageIndex"-->
+<!--          [hidePageSize]="true"-->
+<!--          [disabled]="loadingReports"-->
+<!--          (page)="onPageChange($event)">-->
+<!--        </mat-paginator>-->
+<!--      </div>-->
+
+
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<div *ngIf="loadingReports" class="spinner"></div>
+
+
+
+
+
+
+
+

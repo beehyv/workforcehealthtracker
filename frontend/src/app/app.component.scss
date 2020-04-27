@@ -1,0 +1,42 @@
+.language-footer {
+  position: fixed;
+  bottom: 0;
+  padding: .25rem;
+  background-color: #ffffff;
+}
+.active-language {
+  background: #4e7ed6;
+  color: white;
+}
+
+::ng-deep ::-webkit-scrollbar {
+  width: 10px;
+  height: 7px;
+}
+
+::ng-deep ::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+}
+
+::ng-deep ::-webkit-scrollbar-thumb {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background: rgba(78, 126, 214,0.8);
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+
+::ng-deep ::-webkit-scrollbar-thumb:window-inactive {
+  background: rgba(78, 126, 214,0.4);
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background-color: #4e7ed6 !important;
+}
+::ng-deep .mat-datepicker-toggle-active {
+  color: #4e7ed6 !important;
+}
+::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
+  color: #4e7ed6 !important;
+}

@@ -1,0 +1,103 @@
+.form-header {
+  color: #757575;
+  opacity: 0.5 !important;
+  font-family: Lato;
+  font-size: 14px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 1.17px
+}
+.button-default {
+  cursor: pointer;
+  border: 0;
+  padding: 6px 30px;
+  margin: 10px;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  letter-spacing: .4px;
+  text-align: center;
+  background-image: none;
+  background-color: white;
+  line-height: 2;
+}
+.button-add-worker {
+  border: 2px solid #4e7ed6 !important;
+  background-color: #4e7ed6 !important;
+}
+.button-cancel {
+  border: 2px solid #4e7ed6 !important;
+  color: #444444 !important;
+}
+.custom-border {
+  border-radius: 4px !important;
+  border: solid 2px #eeeeee !important;
+  box-shadow: none !important;
+}
+
+.selected-custom-border {
+  border-radius: 4px !important;
+  border: solid 2px #4e7ed6 !important;
+}
+// We need to use ::ng-deep to overcome view encapsulation
+::ng-deep {
+  .custom-slider .ng5-slider .ng5-slider-bar {
+    background: #ffe4d1;
+    height: 2px;
+  }
+  .custom-slider .ng5-slider .ng5-slider-selection {
+    background: orange;
+  }
+
+  .custom-slider .ng5-slider .ng5-slider-pointer {
+    width: 8px;
+    height: 16px;
+    top: auto; /* to remove the default positioning */
+    bottom: 0;
+    background-color: #333;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+  }
+
+  .custom-slider .ng5-slider .ng5-slider-pointer:after {
+    display: none;
+  }
+
+  .custom-slider .ng5-slider .ng5-slider-bubble {
+    bottom: 14px;
+  }
+
+  .custom-slider .ng5-slider .ng5-slider-limit {
+    font-weight: bold;
+    color: orange;
+  }
+
+  .custom-slider .ng5-slider .ng5-slider-tick {
+    width: 1px;
+    height: 10px;
+    margin-left: 4px;
+    border-radius: 0;
+    background: #ffe4d1;
+    top: -1px;
+  }
+
+  .custom-slider .ng5-slider .ng5-slider-tick.ng5-slider-selected {
+    background: orange;
+  }
+}
+.custom-input-styling {
+  opacity: 0.6;
+  font-family: Lato;
+  font-size: 16px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: 0.34px;
+  color: #444444;
+}
+.worker-title {
+  text-align: center;
+}

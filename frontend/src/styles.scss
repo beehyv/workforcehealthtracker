@@ -1,0 +1,44 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; overflow-y: hidden;}
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.mat-flat-button {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 12px;
+  line-height: 32px !important;
+}
+.popover-body {
+  padding: 0 !important;
+  max-height: 160px;
+  overflow-y: scroll;
+  //overflow-y: hidden;
+}
+.pointer {
+  cursor: pointer;
+}
+.mat-dialog-container {
+  padding: 18px !important;
+}
+//::ng-deep {
+//  .custom-slider .ng5-slider .ng5-slider-selection {
+//    background: #DF495B;
+//  }
+//  .ng5-slider-span .ng5-slider-bubble .ng5-slider-limit .ng5-slider-ceil {
+//    left: auto !important;
+//    right: 0 !important;
+//  }
+//}
+//
+//.ng5-slider-span .ng5-slider-bubble .ng5-slider-limit .ng5-slider-ceil {
+//  left: auto !important;
+//  right: 0 !important;
+//}
+//.ng5-slider.animate .ng5-slider-bubble.ng5-slider-limit {
+//  text-align: right
+//}
+//.ng5-slider.animate .ng5-slider-bar-wrapper {
+//  transition: none !important;
+//}
+::ng-deep .mat-form-field-underline {
+  display: none;
+}

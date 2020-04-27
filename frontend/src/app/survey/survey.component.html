@@ -1,0 +1,148 @@
+<div *ngIf="!loadingSurvey" class="survey-container">
+  <div class= "mx-md-auto screen-adjust d-flex mobile-survey" [class.height-otp]="showOTPscreen" >
+    <div *ngIf="showOTPscreen" class="card card-body survey-card mx-auto p-4 otp-card">
+      <div>
+        <h2 class="text-center">{{language.enter_otp}}</h2>
+        <p>{{language.hi}} {{userDetail.name}}, {{language.otp_sent_msg}}: {{userDetail.phone_number}} {{language.and}} {{language.your}} {{language.email}}: {{userDetail.email}}</p>
+        <input type="text" style="width: 85%" [(ngModel)]="otpValue">
+      </div>
+      <div>
+        <div class="mt-2">{{language.survey_purpose}}.</div>
+        <div class="d-flex pt-3" *ngIf="!userDetail.consent">
+        <mat-checkbox class="d-block pl-0 pt-2 custom-input-styling-for-checkbox"
+                      style="opacity: 1 !important; color: #757575; font-size: 14px"
+                      [(ngModel)]="isTandCChecked"
+        > </mat-checkbox>
+          <p class="agreement-text"> {{language.agreement_text}} <a href="#" target="_blank">{{language.term_of_service}}</a> {{language.and}} <a href="#" target="_blank">{{language.privacy_policy}}</a></p>
+        </div>
+      </div>
+      <div class="form-action py-3 d-flex justify-content-around" style="position: relative; width: 85%">
+        <button class="button-default mx-1 button-next" (click)="submitForOTP()"
+        >{{language.submit}}</button>
+        <button class="button-default mx-1 button-cancel" (click)="resendOTP()"
+        >{{language.resend_otp}}</button>
+      </div>
+    </div>
+    <div *ngIf="!showOTPscreen" class="card card-body survey-card mx-auto p-4">
+      <div *ngIf="alreadySubmitted && !submittedSuccessfully" class="form-submission">
+        {{language.form_already_submitted}}
+      </div>
+      <div *ngIf="submittedSuccessfully" class="form-submission">
+        {{language.thank_you}}
+      </div>
+      <div *ngIf="!alreadySubmitted && !submittedSuccessfully" >
+        <div class="mobile-top-bar d-flex align-content-end flex-wrap">
+          <div class="col-md-6 col-12  title-text p-0">{{language.symptom_checker.toUpperCase()}}</div>
+          <div class="d-md-inline-block d-none col-md-6 col-12 mt-md-0 mt-2 all-fields-required text-md-right text-left p-0">{{language.all_fields_required}}</div>
+        </div>
+        <div class="title-description my-3">
+          {{language.symptom_checker_message}}
+        </div>
+
+        <div class="d-md-done inline-block col-12 mb-3 all-fields-required text-left p-0">{{language.all_fields_required}}</div>
+
+        <div class="d-flex align-content-end flex-wrap mb-3">
+          <div class="col-md-6 col-12 pl-0 pr-md-2 pr-0 mb-md-0 mb-2">
+            <div class="field-background">
+              <span>{{language.name}}: &nbsp;</span>
+              <span class="font-weight-bolder">{{survey_worker_name}}</span>
+            </div>
+          </div>
+          <div class="col-md-6 col-12 pr-0 pl-md-2 pl-0">
+            <div class="field-background">
+              <span>{{language.date}}: &nbsp;</span>
+              <span class="font-weight-bolder">{{survey_date | date: 'dd/MM/yyyy'}}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          {{language.symptom_in_past_24hrs}}
+        </div>
+
+        <div class="input-group d-flex justify-content-between flex-nowrap align-items-center mb-3">
+          <div>{{language.cough}}</div>
+          <div class="button-min-width ml-3">
+            <button mat-raised-button class="custom-border" [class.selected-custom-border]="hasCough === true" (click)="hasCough=true">{{language.yes}}</button>
+            <button mat-raised-button class="ml-3 custom-border" [class.selected-custom-border]="hasCough === false" (click)="hasCough=false">{{language.no}}</button>
+          </div>
+        </div>
+
+        <div class="input-group d-flex justify-content-between flex-nowrap align-items-center mb-3">
+          <div>{{language.shortness_of_breath}}</div>
+          <div class="button-min-width ml-3">
+            <button mat-raised-button class="custom-border" [class.selected-custom-border]="hasShortedNessOfBreadth === true" (click)="hasShortedNessOfBreadth=true">{{language.yes}}</button>
+            <button mat-raised-button class="ml-3 custom-border" [class.selected-custom-border]="hasShortedNessOfBreadth === false" (click)="hasShortedNessOfBreadth=false">{{language.no}}</button>
+          </div>
+        </div>
+
+        <div class="input-group d-flex justify-content-between flex-nowrap align-items-center mb-3">
+          <div>{{language.fever_temp}}</div>
+          <div class="button-min-width ml-3">
+            <button mat-raised-button class="custom-border" [class.selected-custom-border]="hasFever === true" (click)="hasFever=true">{{language.yes}}</button>
+            <button mat-raised-button class="ml-3 custom-border" [class.selected-custom-border]="hasFever === false" (click)="hasFever=false">{{language.no}}</button>
+          </div>
+        </div>
+        <div *ngIf = "hasFever" class="input-group d-flex justify-content-between flex-nowrap align-items-center mb-3">
+          <div>{{language.temperature_message}}?</div>
+          <div class="button-min-width ml-3">
+            <input class="form-control custom-border" type="number" placeholder="{{language.temperature}}" [min]="95" [max]="105" [(ngModel)]="temperature">
+          </div>
+        </div>
+
+        <div class="input-group d-flex justify-content-between flex-nowrap align-items-center mb-3">
+          <div>{{language.foreign_travel}}</div>
+          <div class="button-min-width ml-3">
+            <button mat-raised-button class="custom-border" [class.selected-custom-border]="hasForeignTravel === true" (click)="hasForeignTravel=true">{{language.yes}}</button>
+            <button mat-raised-button class="ml-3 custom-border" [class.selected-custom-border]="hasForeignTravel === false" (click)="hasForeignTravel=false">{{language.no}}</button>
+          </div>
+        </div>
+        <div *ngIf = "hasForeignTravel" class="input-group justify-content-between flex-nowrap align-items-center mb-3">
+          <div>{{language.foreign_travel_date}}</div>
+          <div class="button-min-width ml-3">
+            <mat-form-field class="w-100" appearance="standard">
+              <mat-label>{{language.choose_a_date}}</mat-label>
+              <input matInput
+                     [matDatepicker]="picker"
+                     [min]="oldestDateAllowed"
+                     [max]="today"
+                     [formControl]="foreignTravelDateCtrl"
+                     [(ngModel)] = "foreignTravelDate">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="input-group d-flex justify-content-between flex-nowrap align-items-center mb-3">
+          <div>{{language.corona_patient_history}}</div>
+          <div class="button-min-width ml-3">
+            <button mat-raised-button class="custom-border" [class.selected-custom-border]="hasCoronaPatientHistory === true" (click)="hasCoronaPatientHistory=true">{{language.yes}}</button>
+            <button mat-raised-button class="ml-3 custom-border" [class.selected-custom-border]="hasCoronaPatientHistory === false" (click)="hasCoronaPatientHistory=false">{{language.no}}</button>
+          </div>
+        </div>
+        <div *ngIf = "hasCoronaPatientHistory" class="input-group d-flex justify-content-between flex-nowrap align-items-center mb-3">
+          <div>{{language.corona_patient_history_date}}</div>
+          <div class="button-min-width ml-3">
+            <mat-form-field class="w-100" appearance="standard">
+              <mat-label>{{language.choose_a_date}}</mat-label>
+              <input matInput
+                     [matDatepicker]="picker"
+                     [min]="oldestDateAllowed"
+                     [max]="today"
+                     [formControl]="coronaPatientHistoryDateCtrl"
+                     [(ngModel)]="coronaPatientHistoryDate">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="text-right">
+          <button mat-raised-button class="col-md-4 col-12 text-white" style="background-color: #4e7ed6" (click)="submit()">{{language.submit}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="loadingSurvey" class="spinner"></div>

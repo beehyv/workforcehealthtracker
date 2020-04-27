@@ -1,0 +1,6 @@
+<router-outlet></router-outlet>
+<mat-divider></mat-divider>
+
+<div class="language-footer w-100 d-flex p-1 justify-content-end">
+  <span class="pointer p-1 rounded" [class.active-language]="cookieValue == 'en' || !cookieValue" (click)="changeLanguage('en')">English</span> <span class="px-3 pointer p-1 rounded" [class.active-language]="cookieValue == 'hi'" (click)="changeLanguage('hi')">हिन्दी</span>
+</div>

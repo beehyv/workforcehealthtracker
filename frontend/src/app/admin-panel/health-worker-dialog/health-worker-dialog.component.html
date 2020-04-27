@@ -1,0 +1,104 @@
+<div class="container-fluid health-worker-container">
+  <h2 class="worker-title">{{this.status === 'post' ? language.add_worker.toUpperCase() : language.update_worker.toUpperCase()}}</h2>
+  <div>
+    <div class="form-block pb-3">
+      <h4 class="form-header my-0">{{language.personal_details}}</h4>
+      <div class="row m-0 py-2 custom-input-styling">
+        <div class="col-6 pl-0 pr-2">
+          <input type="text" class="input-group input-border px-2" placeholder="{{language.first_name}}" [(ngModel)]="healthWorkerData.first_name" [formControl]="nameControl">
+        </div>
+        <div type="text" class="col-6 pr-0 pl-2">
+          <input class="input-group input-border px-2" placeholder="{{language.last_name}}" [(ngModel)]="healthWorkerData.last_name" [formControl]="lastNameControl">
+        </div>
+      </div>
+      <div class="row m-0 py-2 custom-input-styling">
+        <div class="col-6 pl-0 pr-2 d-flex justify-content-between">
+<!--          <input type="text" class="input-group input-border px-2" >-->
+          <input class="input-group input-border px-2" placeholder="{{language.date_of_birth}}"
+                 [matDatepicker]="picker"
+                 [min]="minWorkerDOB"
+                 [max]="maxWorkerDOB"
+                 [formControl]="dateCtrl"
+                 [(ngModel)]="healthWorkerData.date_of_birth"
+                 >
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </div>
+        <div class="col-6 pr-0 pl-2"><input type="email" class="input-group input-border px-2" placeholder="{{language.email}}" [(ngModel)]="healthWorkerData.email" [formControl]="emailFormControl"></div>
+      </div>
+      <div class="row m-0 py-2 justify-content-end">
+        <div class="col-6 pl-0 pr-2 custom-input-styling">
+          <input type="tel" maxlength="10" class="input-group input-border px-2" placeholder="{{language.phone_no}}"
+                 [(ngModel)]="healthWorkerData.phone_number" [formControl]="phoneNumberControl"
+                 [class.invalid-field]="isPhoneNotValid" (keyup)="isPhoneNotValid = !phoneNumberControl.valid">
+        </div>
+        <div class="col-6 pr-0 pl-2 custom-input-styling">
+          <input type="tel" maxlength="10" class="input-group input-border px-2" placeholder="{{language.whatsapp}}" [(ngModel)]="healthWorkerData.whatsapp_number" [formControl]="whatsAppNumberControl">
+          </div>
+        <mat-checkbox class="d-block col-6 pr-0 pl-2 pt-2 custom-input-styling-for-checkbox" style="opacity: 1 !important; color: #757575; font-size: 14px" [(ngModel)]="isMobileAndWhatsappSame" (change)="checkForWhatsappNumber()">{{language.same_as_mobile_number}}</mat-checkbox>
+
+      </div>
+    </div>
+    <div class="form-block pb-3">
+      <h4 class="form-header my-0">{{language.employment_details}}</h4>
+      <div class="row m-0 py-2 custom-input-styling">
+        <div class="col-6 pl-0 pr-2">
+          <input  class="input-group input-border px-2" placeholder="{{language.employee_id}}" [(ngModel)]="healthWorkerData.employee_id" [formControl]="employeeIdControl">
+        </div>
+        <mat-form-field appearance="outline" class="col-6 pr-0 pl-2">
+          <mat-label>{{language.group}}</mat-label>
+          <mat-select [formControl]="groupCtrl" multiple>
+            <mat-option *ngFor="let group of groups" [value]="group.id">{{group.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <!-- <div class="col-6">
+          <input class="input-group input-border px-2" placeholder="{{language.facility}}" [(ngModel)]="healthWorkerData.facility_id">
+        </div> -->
+      </div>
+      <div class="row m-0 py-2 custom-input-styling">
+        <mat-form-field appearance="outline" class="col-6 pl-0 pr-2 hcw-type-control">
+<!--          <input class="input-group input-border px-2" placeholder="{{language.hcw_type_id}}" [(ngModel)]="healthWorkerData.hcw_type_id">-->
+          <input matInput
+                 [placeholder]="language.hcw_type_id"
+                 aria-label="hcw_type_id"
+                 [matAutocomplete]="auto"
+                 [formControl]="hcwTypeIdControl">
+          <button mat-button matSuffix mat-icon-button
+                  aria-label="Clear" (click)="clearhcwTypeIdControl(); $event.stopPropagation()">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let hwcType of filteredHWCtypes | async" [value]="hwcType.hcw_type_name" (click)="saveHwc(hwcType.id)">
+              <span>{{hwcType.hcw_type_name}}</span>
+            </mat-option>
+          </mat-autocomplete>
+
+        </mat-form-field>
+        <div class="col-6 pr-0 pl-2">
+          <input class="input-group input-border px-2" placeholder="{{language.department}}" [(ngModel)]="healthWorkerData.department">
+        </div>
+      </div>
+    </div>
+    <div class="form-block pb-3 ">
+      <h4 class="form-header my-0">{{language.health_history}}</h4>
+      <div class="row m-0 py-2 custom-input-styling">
+        <mat-form-field appearance="outline" class="col-6 pt-1 pl-0 pr-2">
+          <mat-label>{{language.chronic_disease}}</mat-label>
+          <mat-select [formControl]="illnessCtrl" multiple>
+            <mat-option *ngFor="let chronicIllness of chronicIllnesses" [value]="chronicIllness.id">{{chronicIllness.illness_name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-6 pt-1 pr-0 pl-2">
+          <mat-label>{{language.immunodeficiency}}</mat-label>
+          <mat-select [formControl]="immunoCtrl" multiple>
+            <mat-option *ngFor="let illness of immuneDefeciency" [value]="illness.id">{{illness.deficiency_name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="form-action d-flex justify-content-end">
+      <button class="button-default button-cancel" (click)="cancel()">{{language.cancel}}</button>
+      <button class="button-default button-add-worker" (click)="submitDetails()">{{this.status === 'post' ? language.add_worker : language.update_worker}}</button>
+    </div>
+  </div>
+</div>

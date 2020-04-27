@@ -1,0 +1,33 @@
+
+{% extends 'admin/change_form.html' %}
+{% load static %}
+{% block admin_change_form_document_ready %}
+{{ block.super }}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js">
+</script>
+<script>
+    var facilitySelect = document.getElementById('id_facility');
+    facilitySelect.addEventListener('change', function(e) {
+        loadDropdown();
+    });
+    if(facilitySelect.value) {
+        loadDropdown();
+    }
+
+    function loadDropdown() {
+      var facilitySelect = document.getElementById('id_facility');
+      $.get('/facility/getAllHCWType?organization_id='+facilitySelect.value, function(resp) {
+          var hcwTypeSelect = $('#id_hcw_type_id');
+          var value = document.getElementById('id_hcw_type_id').value;
+          hcwTypeSelect.empty();
+          hcwTypeSelect.append('<option>-------</option>');
+          $.each(resp, function (val, text) {
+              hcwTypeSelect.append(
+                  $('<option></option>').val(text.id).html(text.hcw_type_name)
+              );
+            });
+          hcwTypeSelect.val(value);
+        });
+    }
+</script>
+{% endblock %}

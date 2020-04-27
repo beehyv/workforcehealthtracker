@@ -1,0 +1,133 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Lato', sans-serif;
+}
+.login-div {
+  background: inherit;
+  .login-button {
+    padding: 5px;
+    margin: 30px 0;
+    color: white;
+    background: #5f53d9;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    font-weight: bold;
+  }
+}
+.login-card {
+	padding: 5rem;
+	box-shadow: 0 0 10px #dddddd;
+}
+.stretch {
+  flex: 1;
+}
+.card-title {
+  letter-spacing: 2px;
+  padding: 0.3rem 0;
+}
+.login-text {
+	font-size: 24px;
+	line-height: 36px;
+	font-weight: 900;
+}
+.login-description {
+  color: #757575;
+  letter-spacing: 1.5px;
+  font-weight: 900;
+  font-size: 18px;
+}
+.image {
+	padding: 5rem;
+  width: 50%;
+  margin: auto;
+}
+.image > img {
+  display: block;
+  margin: auto;
+}
+@media screen and (max-width: 720px){
+  .image {
+    display: none;
+  }
+  .login-card{
+    overflow: hidden;
+    padding: 3rem;
+  }
+}
+@media screen and (min-width: 721px) {
+  .login-card {
+    min-width: 50%;
+    padding: 6%;
+  }
+  .image > img {
+    width: 100%;
+  }
+}
+  @media screen and (min-width: 1024px){
+  .login-card {
+    min-width: 50%;
+    padding: 10%;
+  }
+  .image > img {
+    width: 100%;
+  }
+}@media screen and (min-width: 1201px){
+  .login-card {
+    min-width: 50%;
+    padding: 10%;
+  }
+  .image > img {
+    width: 80%;
+  }
+}
+@media screen and (min-width: 1300px){
+  .login-card {
+    min-width: 50%;
+    padding: 15%;
+  }
+}
+.input {
+  font-size: 1.1rem;
+  border-radius: 4px;
+  border: 1px solid #dddddd;
+  padding: 0.4rem 0;
+  margin: 0.7rem 0;
+  img {
+    padding: 0.4rem 1rem;
+  }
+  input {
+    padding: 0.4rem;
+    border: none;
+  }
+}
+.mat-card > .mat-card-actions:last-child {
+	margin-bottom: 0px !important;
+}
+
+.h-login {
+	height: calc(100vh - 23px) !important;
+}
+.spinner {
+	border: 16px solid silver;
+	border-top: 16px solid #337ab7;
+	border-radius: 50%;
+	width: 80px;
+	height: 80px;
+	animation: spin 700ms linear infinite;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+	position: absolute;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}

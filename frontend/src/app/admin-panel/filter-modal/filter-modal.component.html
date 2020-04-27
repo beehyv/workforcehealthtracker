@@ -1,0 +1,45 @@
+<div class="container-fluid">
+  <h2 class="worker-title">{{language.filter}}</h2>
+  <div class="row custom-input-styling">
+    <mat-form-field appearance="outline" class="col-12 col-md-6 pr-0 pl-2">
+      <mat-label>{{language.group}}</mat-label>
+      <mat-select [formControl]="groupCtrl" multiple>
+        <mat-option *ngFor="let group of groups" [value]="group.id">{{group.name}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="col-12 col-md-6  pr-0 pl-2">
+      <mat-label>{{language.status}}</mat-label>
+      <mat-select [formControl]="statusCtrl">
+        <mat-option *ngFor="let status of resultStatus" [value]="status.id">{{status.result_status}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="my-3 custom-slider">
+    <mat-label class="form-header">{{language.age}}</mat-label>
+    <ng5-slider #slider [(value)]="value" [(highValue)]="highValue" [options]="options"  [manualRefresh]="manualRefresh"></ng5-slider>
+  </div>
+
+  <h4 class="form-header my-0">{{language.health_history}}</h4>
+  <div class="row m-0 py-2 custom-input-styling">
+    <div class="col-12 col-md-6  pt-1 pl-0 pr-2">
+      <mat-label>{{language.immunodeficiency}}</mat-label>
+      <div class="button-min-width ml-3 mt-2">
+        <button mat-raised-button class="custom-border" [class.selected-custom-border]="isImmunodeficiency === 'true'" (click)="isImmunodeficiency='true'">{{language.yes}}</button>
+        <button mat-raised-button class="ml-3 custom-border" [class.selected-custom-border]="isImmunodeficiency === 'false'" (click)="isImmunodeficiency='false'">{{language.no}}</button>
+      </div>
+    </div>
+    <div class="col-12 col-md-6  pr-0" [class.pl-0]="isMobile">
+      <mat-label>{{language.chronic_disease}}</mat-label>
+      <div class="button-min-width ml-3 mt-2 d-flex">
+        <button mat-raised-button class="custom-border" [class.selected-custom-border]="isChronicIllness === 'true'" (click)="isChronicIllness='true'">{{language.yes}}</button>
+        <button mat-raised-button class="ml-3 custom-border" [class.selected-custom-border]="isChronicIllness === 'false'" (click)="isChronicIllness='false'">{{language.no}}</button>
+      </div>
+    </div>
+  </div>
+  <div class="form-action d-flex justify-content-end">
+  <button class="button-default button-cancel" (click)="cancel()">{{language.cancel}}</button>
+  <button class="button-default button-add-worker" (click)="submitDetails()">OK</button>
+  </div>
+</div>
