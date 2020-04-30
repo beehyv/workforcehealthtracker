@@ -1,8 +1,9 @@
 # Workforce Health Tracker
 <a href="https://www.beehyv.com" target="_blank"><img src="https://www.beehyv.com/wp-content/uploads/2020/02/Beehyv-Logo-01.svg" width="120" alt="BeeHyv Software Solutions Pvt Ltd"/></a>
 > Powered by BeeHyv Software Solutions Pvt Ltd and Distributed under Apache 2.0 Licence
+
 ## Overview
-The Healthcare work force, engaged in fighting COVID-19 across facilities and within communities, is a key resource to protect, making it essential to manage their exposure to infection in the current context. While most health staff are self-reporting symptoms and/or taking precautions to the best of their abilities, it is critical to ensure their health is monitored daily and technology can play a huge role to facilitate this process.
+The Healthcare work force, engaged in fighting COVID-19 across facilities and within communities, is a key resource to protect, making it essential to manage their exposure to infection in the current context. While most health staff are self-reporting symptoms and/or taking precautions to the best of their abilities, it is critical to ensure their health is monitored daily and technology can play a huge role to facilitate this process. This application can be customized to use during other pandemics too.
 
 The WorkforceHealthTracker Health Monitoring Application (COVID-19), is a Mobile responsive Web-based application, developed to create visibility to daily monitor and track the health of the healthcare workers. This will enable the health administration to make decisions around who should come to work (facility/outreach) and who should remain at home to take care of their own health. This is necessary to ensure the staff is quarantined, tested or treated in a timely manner, while ensuring no IPC breaches. This will also provide real-time visibility to facilitate deployment of staff at facilities, to care for those in need. 
 
@@ -49,4 +50,5 @@ The workforce can report their symptoms daily, before heading to work, by updati
 	* Integration with Whatsapp, email, SMS is possible
 	*  Ability to support multiple (LTR) languages like English, Hindi, Bengali, etc. 
 	*  Ability to support bi-directional API integrations
- 
+ ## Contact Details
+Please reach out to <a href="mailto:workforcehealthtracker@beehyv.com">workforcehealthtracker@beehyv.com</a> for additional information and product demos.
