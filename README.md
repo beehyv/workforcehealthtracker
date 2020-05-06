@@ -52,3 +52,11 @@ The workforce can report their symptoms daily, before heading to work, by updati
 	*  Ability to support bi-directional API integrations
  ## Contact Details
 Please reach out to <a href="mailto:workforcehealthtracker@beehyv.com">workforcehealthtracker@beehyv.com</a> for additional information and product demos.
+## Contributing to the Project
+Please follow the steps if you want to contribute to the project
+* Fork Repository to your own Github account
+* Make suitable modifications to the code
+* Create a Pull Request to the Original Repository's master branch
+* Once the Pull request is created, the Project Owners will review the changes and if found acceptable, will merge with the master branch.
+## Feature Request
+In case of new feature requests please use the Github Issues page to raise tickets for Bugs as well as enhancements. The community can then take up the functionality as per need.
