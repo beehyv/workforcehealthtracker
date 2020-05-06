@@ -1,4 +1,4 @@
-#Installation Instructions
+# Installation Instructions
 This project is built using REST framework. The technology stack is as follows:
 * Python 3.6+
 * Angular 8+
