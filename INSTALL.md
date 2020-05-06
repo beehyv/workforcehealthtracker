@@ -3,6 +3,8 @@ This project is built using REST framework. The technology stack is as follows:
 * Python 3.6+
 * Angular 8+
 * Angular-Material
+* Nodejs
+* NPM/Yarn
 * Django 1.11
 * SQL Based Database (MySQL is preferred but any SQL DB can be used)
 * Apache 2.4
@@ -87,4 +89,25 @@ The Project contains two modules:
             WSGIPassAuthorization On
     </VirtualHost>
     ```
+## Frontend Setup
+
+Frontend code is built using Angular 8. We use npm as the package manager of choice.
+* Use `npm` or `yarn` for dependency management
+* Our preferred package manager is `npm`
+* Navigate to the `<frontend-root>`
+* Run 
+    ```bash
+    npm install
+    ```
+* Navigate to and open `<frontend-root>/src/app/utils/UrlUtils.ts` using your favourite text editor
+* Modify the following line in the file to point to the appropriate backend url.
+    ```angular2
+    const BASE_URL = '';
+    ```
+* Run the following code to package and build the frontend distribution
+    ```bash
+    npx ng build --prod
+    ```
+* Deploy the code available in `<frontend-path>/dist/HCW-Tracker` into your favourite webserver.
+
 
