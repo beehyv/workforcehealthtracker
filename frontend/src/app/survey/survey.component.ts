@@ -115,9 +115,11 @@ export class SurveyComponent implements OnInit {
         this.surveyId = params.survey_id;
         localStorage.setItem('survey-id', this.surveyId);
       }
-      if (localStorage.getItem('authToken') || localStorage.getItem('survey-id')) {
+      if (localStorage.getItem('authToken') || localStorage.getItem('not-of-otp-screen')) {
         this.showOTPscreen = false;
-        this.surveyId = localStorage.getItem('survey-id');
+        if (localStorage.getItem('survey-id')) {
+          this.surveyId = localStorage.getItem('survey-id');
+        }
         this.fetchDataService.getSurveyForm(this.surveyId).subscribe((response) => {
           // this.surveyQuestions = response['questions'];
           this.loadingSurvey = false;
@@ -227,6 +229,8 @@ export class SurveyComponent implements OnInit {
         this.loadingSurvey = false;
         this.snackbar.open(this.language.success_message, this.language.dismiss, {duration: 1000});
         this.submittedSuccessfully = true;
+        localStorage.removeItem('not-of-otp-screen');
+        localStorage.removeItem('survey-id');
         setTimeout(function() {
           var win = window.open("about:blank", "_self");
           win.close();
@@ -252,6 +256,7 @@ export class SurveyComponent implements OnInit {
         if (res['verified']){
           this.fetchDataService.getSurveyForm(this.surveyId).subscribe((response) => {
             this.showOTPscreen = false;
+            localStorage.setItem('not-of-otp-screen', 'true');
             // this.surveyQuestions = response['questions'];
             this.survey_worker_name = response['username'];
             this.survey_date = response['survey_date'];

@@ -54,11 +54,12 @@ class CommunicationHandler:
         pass
 
     def send_email_message(self, user, message):
+        email = user.email
         if message["header"] is not None:
             send_mail(
                 message["header"],
                 message["message"],
                 settings.EMAIL_HOST_USER,
-                [user["email"]],
+                [email],
                 fail_silently=True,
             )

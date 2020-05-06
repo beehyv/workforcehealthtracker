@@ -54,3 +54,6 @@ urlpatterns = [
     url(r'^getAllImmunodeficiency/', ImmunodeficiencyList.as_view(), name='Immunodeficiency list'),
 
 ]
+
+admin.site.site_title = "Workforce Health Tracker"
+admin.site.site_header = "Workforce Health Tracker Admin" 

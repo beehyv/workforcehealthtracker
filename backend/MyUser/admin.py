@@ -48,11 +48,6 @@ class UserCreationForm(ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
 
-    organization = forms.ModelChoiceField(
-        queryset=Facility.objects.all(),
-        required=True,
-    )
-
     class Meta:
         model = MyUser
         fields = '__all__'
@@ -95,11 +90,6 @@ class UserChangeForm(forms.ModelForm):
     """
     password = ReadOnlyPasswordHashField()
 
-    organization = forms.ModelChoiceField(
-        queryset=Facility.objects.all(),
-        required=True,
-    )
-
     class Meta:
         model = MyUser
         fields = '__all__'
@@ -130,6 +120,11 @@ class MyUserAdmin(UserAdmin):
             return MyUser.objects.filter(organization=facility).all()
 
     #todo make organization preselected by default on when manager create other managers
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if not request.user.is_admin and db_field.name == 'organization':
+            kwargs['queryset'] = Facility.objects.filter(id=request.user.organization.id)
+        return super(MyUserAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
     def save_model(self, request, obj, form, change):
         default_group = obj.organization.usergroup_set.filter(is_default=True).first()

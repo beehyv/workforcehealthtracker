@@ -51,10 +51,10 @@ class SubmitSurvey(generics.CreateAPIView):
                 for data in list(serializer.data):
                     survey_id = data['survey_instance_id']
 
-
                 survey_instance = SurveyInstance.objects.filter(id=survey_id).first()
                 if survey_instance is not None and survey_instance.submitted_time is not None:
-                    return HttpResponse("Survey already submitted for survey id " + str(survey_id), status=status.HTTP_400_BAD_REQUEST)
+                    return HttpResponse("Survey already submitted for survey id " + str(survey_id),
+                                        status=status.HTTP_400_BAD_REQUEST)
 
                 else:
                     A1 = 0
@@ -67,11 +67,11 @@ class SubmitSurvey(generics.CreateAPIView):
                         answer = data['answer']
                         survey_answer = SurveyAnswer(survey_instance_id_id=survey_id,
                                                      question_id_id=str(question_id), answer=answer)
-                        if int(question_id )== 1: A1 = int(answer)
-                        if int(question_id ) == 2: A2 = int(answer)
-                        if int(question_id ) == 10: A3 = int(answer)
-                        if int(question_id ) == 8: C = int(answer)
-                        if int(question_id ) == 9: B = int(answer)
+                        if int(question_id) == 1: A1 = int(answer)
+                        if int(question_id) == 2: A2 = int(answer)
+                        if int(question_id) == 10: A3 = int(answer)
+                        if int(question_id) == 8: C = int(answer)
+                        if int(question_id) == 9: B = int(answer)
                         survey_answer.save()
 
                     if survey_id is not None:
@@ -91,25 +91,24 @@ class SubmitSurvey(generics.CreateAPIView):
                             result_id = 1
                             age = datetime.datetime.now().year - health_worker.date_of_birth.year
 
-                            if ( (A1 + A2 + A3 == 1) or (A1 + A2 + A3 == 2)) \
-                                    and ( B + C == 0) :
+                            if ((A1 + A2 + A3 == 1) or (A1 + A2 + A3 == 2)) \
+                                    and (B + C == 0):
                                 if age >= 60:
-                                    result_id = 7 # quarantine - 72 hours contact
+                                    result_id = 7  # quarantine - 72 hours contact
                                 else:
-                                    result_id = 8 # precaution - you have symptoms
+                                    result_id = 8  # precaution - you have symptoms
                             else:
-                                if (A1 + A2 + A3 == 3 ) or B == 1 or C == 1:
-                                    result_id = 9 # quarantine - 24 hours contact
+                                if (A1 + A2 + A3 == 3) or B == 1 or C == 1:
+                                    result_id = 9  # quarantine - 24 hours contact
                                 else:
                                     if health_worker.immunodeficiencies.count() > 0:
                                         if age >= 60:
-                                            result_id = 11 # stay at home
+                                            result_id = 11  # stay at home
                                         else:
                                             result_id = 10
 
                             survey_instance.result_id = ResultStatus.objects.filter(
-                                    id=result_id).first()
-
+                                id=result_id).first()
 
                         survey_instance.save()
                         health_worker.result_status_id = survey_instance.result_id
@@ -130,7 +129,7 @@ class SubmitSurvey(generics.CreateAPIView):
                                 if result_id == 11:
                                     message = "The advice will be to stay at home, and the district office will send a doctor to their home to do a checkup."
                                 commHandler = CommunicationHandler()
-                                commHandler.send_message(health_worker, 1, {'health_status':message})
+                                commHandler.send_message(health_worker, 1, {'health_status': message})
 
                             else:
                                 message = "Your status is still " + health_worker.result_status_id.result_status
@@ -194,7 +193,8 @@ class GetSurveyForm(generics.RetrieveAPIView):
         survey = survey_instance.survey_id
         question_ids = list(SurveyQuestion.objects.filter(survey_id=survey.id).values_list('question_id', flat=True))
         questions = list(Question.objects.filter(id__in=question_ids))
-        return SurveyForm(survey_instance.health_worker_id.first_name, survey.survey_name, questions, survey_instance.survey_date)
+        return SurveyForm(survey_instance.health_worker_id.first_name, survey.survey_name, questions,
+                          survey_instance.survey_date)
 
 
 class GetSurveyReport(generics.ListAPIView):
@@ -266,6 +266,7 @@ class GetSurveyReport(generics.ListAPIView):
 
         return response
 
+
 def send_whatsapp_message(request):
     if request.GET['phone_number'] is None:
         return HttpResponse("Missing phone number", status=status.HTTP_400_BAD_REQUEST)
@@ -294,10 +295,11 @@ def send_whatsapp_message(request):
     response['whatsapp_number'] = whatsapp_number
 
     commHandler = CommunicationHandler()
-    commHandler.send_message(health_worker, 2, {'survey_link':settings.FRONTEND_URL+"/#/survey?survey_id=" + str(response['survey_id'])})
-
+    commHandler.send_message(health_worker, 2, {
+        'survey_link': settings.FRONTEND_URL + "/#/survey?survey_id=" + str(response['survey_id'])})
 
     return JsonResponse(response)
+
 
 class GetSurveyAggregates(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
@@ -309,23 +311,24 @@ class GetSurveyAggregates(generics.RetrieveAPIView):
                 hcw_set.add(hcw)
                 hcw_set_id.add(hcw.id)
 
-
-        survey_instances = SurveyInstance.objects.filter(health_worker_id__in=hcw_set_id, survey_date=datetime.datetime.today()).order_by('-submitted_time').all()
+        survey_instances = SurveyInstance.objects.filter(health_worker_id__in=hcw_set_id,
+                                                         survey_date=datetime.datetime.today()).order_by(
+            '-submitted_time').all()
 
         aggrs = {
-                            'responded': 0,
-                            'yet_to_respond': 0,
-                            'no_action': 0,
-                            'result_pending': 0,
-                            'test_ordered': 0,
-                            'positive': 0,
-                            'negative': 0,
-                            'home_quarantine_72': 0,
-                            'precautionary_symptoms': 0,
-                            'home_quarantine_24': 0,
-                            'precuationary_general': 0,
-                            'advised_stay_home': 0
-                        }
+            'responded': 0,
+            'yet_to_respond': 0,
+            'no_action': 0,
+            'result_pending': 0,
+            'test_ordered': 0,
+            'positive': 0,
+            'negative': 0,
+            'home_quarantine_72': 0,
+            'precautionary_symptoms': 0,
+            'home_quarantine_24': 0,
+            'precuationary_general': 0,
+            'advised_stay_home': 0
+        }
 
         surveys = {}
         for inst in survey_instances:
@@ -339,7 +342,7 @@ class GetSurveyAggregates(generics.RetrieveAPIView):
             if survey_list and len(survey_list) > 1 and survey_list[0].submitted_time is not None:
                 aggrs['responded'] += 1
             else:
-                aggrs['yet_to_respond'] +=1
+                aggrs['yet_to_respond'] += 1
 
         for hcw in hcw_set:
             result_id = hcw.result_status_id
@@ -367,5 +370,3 @@ class GetSurveyAggregates(generics.RetrieveAPIView):
                     aggrs['advised_stay_home'] += 1
 
         return JsonResponse(aggrs)
-
-
