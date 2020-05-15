@@ -1,6 +1,6 @@
 # Workforce Health Tracker
-<a href="https://www.beehyv.com" target="_blank"><img src="https://www.beehyv.com/wp-content/uploads/2020/02/Beehyv-Logo-01.svg" width="120" alt="BeeHyv Software Solutions Pvt Ltd"/></a>
-> Powered by BeeHyv Software Solutions Pvt Ltd and Distributed under Apache 2.0 Licence
+<a href="https://www.beehyv.com" target="_blank"><img alt="BeeHyv Software Solutions Pvt Ltd" src="https://www.beehyv.com/wp-content/uploads/2020/02/Beehyv-Logo-01.svg" width="120" alt="BeeHyv Software Solutions Pvt Ltd"/></a>
+> Powered by <a href="https://www.beehyv.com">BeeHyv Software Solutions Pvt Ltd</a> and Distributed under Apache 2.0 Licence
 
 ## Overview
 We are all aware and grateful for the contributions of the workforce across the public and private sectors.
